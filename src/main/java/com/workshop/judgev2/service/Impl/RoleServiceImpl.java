@@ -21,10 +21,10 @@ public class RoleServiceImpl implements RoleService {
     public void importRoles() {
 
         if (this.roleRepository.count() == 0){
-            Role admin = new Role(RoleName.ADMIN);
-            roleRepository.saveAndFlush(admin);
-            Role user = new Role(RoleName.USER);
-            roleRepository.saveAndFlush(user);
+            for (RoleName value : RoleName.values()) {
+                Role role = new Role(value);
+                this.roleRepository.saveAndFlush(role);
+            }
         }
 
     }

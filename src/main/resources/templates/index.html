@@ -1,18 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="https://www.thymeleaf.org">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Judge v2</title>
-
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600">
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/style.css">
-	<script src="/js/jquery-3.3.1.min.js"></script>
-	<script src="/js/bootstrap.min.js"></script>
-</head>
+<th:block th:include="~{fragments/head}"></th:block>
 
 <body id="reportsPage">
 <div id="home">
@@ -52,13 +41,7 @@
         <div class="container mt-lg-5 border-right border-bottom bg-transparent h-100">
                 <h1 class="w-100 text-light text-right">Welcome</h1>
         </div>
-        <footer class="row">
-            <div class="col-12 container-fluid text-right font-weight-light">
-                <p class="d-inline-block tm-bg-black text-white py-2 px-4">
-                    &copy; Spring Team 2020
-                </p>
-            </div>
-        </footer>
+        <th:block th:include="~{fragments/footer}"></th:block>
     </div>
 </div>
 
