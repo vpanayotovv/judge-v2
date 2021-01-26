@@ -22,8 +22,8 @@ public class RoleServiceImpl implements RoleService {
 
         if (this.roleRepository.count() == 0){
             Role admin = new Role(RoleName.ADMIN);
-            Role user = new Role(RoleName.USER);
             roleRepository.saveAndFlush(admin);
+            Role user = new Role(RoleName.USER);
             roleRepository.saveAndFlush(user);
         }
 
