@@ -22,7 +22,7 @@ public class UserRegisterBindingModel {
     private String password;
 
     @NotNull
-    @Email(message = "Invalid Email")
+    @Length(min = 2,message = "Password must be minimum 2 characters")
     private String confirmPassword;
 
     @NotNull

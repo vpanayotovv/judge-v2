@@ -5,6 +5,7 @@ import com.workshop.judgev2.model.service.UserServiceModel;
 import com.workshop.judgev2.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -32,7 +33,10 @@ public class UserController {
     }
 
     @GetMapping("/register")
-    public String register(){
+    public String register(Model model){
+        if (!model.containsAttribute("userRegisterBindingModel")){
+            model.addAttribute("userRegisterBindingModel",new UserRegisterBindingModel());
+        }
         return "register";
     }
 
@@ -41,7 +45,7 @@ public class UserController {
                                   BindingResult bindingResult,
                                   RedirectAttributes redirectAttributes){
 
-        if (bindingResult.hasErrors()){
+        if (bindingResult.hasErrors() || !userRegisterBindingModel.getPassword().equals(userRegisterBindingModel.getConfirmPassword())){
             redirectAttributes.addFlashAttribute("userRegisterBindingModel",userRegisterBindingModel);
             return "redirect:register";
         }
@@ -50,7 +54,7 @@ public class UserController {
 
         this.userService.registerUser(userServiceModel);
 
-        return "redirect:register";
+        return "redirect:login";
     }
 
 }

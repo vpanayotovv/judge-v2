@@ -28,4 +28,9 @@ public class RoleServiceImpl implements RoleService {
         }
 
     }
+
+    @Override
+    public Role getRole(RoleName roleName) {
+       return this.roleRepository.findByName(roleName).orElseThrow(() -> new IllegalArgumentException("Invalid Role"));
+    }
 }
