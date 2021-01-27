@@ -28,4 +28,11 @@ public class UserServiceImpl implements UserService {
         user.setRole(this.roleService.getRole(RoleName.USER));
         this.userRepository.save(user);
     }
+
+    @Override
+    public UserServiceModel getUserByUsername(String username) {
+       return this.userRepository.findByUsername(username)
+               .map(user -> this.modelMapper.map(user,UserServiceModel.class))
+               .orElseThrow( () -> new IllegalArgumentException("Username not found!"));
+    }
 }

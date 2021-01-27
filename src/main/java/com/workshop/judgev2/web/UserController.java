@@ -1,5 +1,6 @@
 package com.workshop.judgev2.web;
 
+import com.workshop.judgev2.model.binding.UserLoginBindingModel;
 import com.workshop.judgev2.model.binding.UserRegisterBindingModel;
 import com.workshop.judgev2.model.service.UserServiceModel;
 import com.workshop.judgev2.service.UserService;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @Controller
@@ -28,8 +30,40 @@ public class UserController {
     }
 
     @GetMapping("/login")
-    public String login(){
+    public String login(Model model){
+        if (!model.containsAttribute("userLoginBindingModel")){
+            model.addAttribute("userLoginBindingModel", new UserLoginBindingModel());
+            model.addAttribute("notFound",false);
+        }
         return "login";
+    }
+
+    @PostMapping("/login")
+    public String loginConfirm(@Valid @ModelAttribute UserLoginBindingModel userLoginBindingModel,
+                               BindingResult bindingResult,
+                               RedirectAttributes redirectAttributes,
+                               HttpSession httpSession){
+
+        if (bindingResult.hasErrors()){
+            redirectAttributes.addFlashAttribute("userLoginBindingModel",userLoginBindingModel);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.userLoginBindingModel",bindingResult);
+
+            return "redirect:login";
+        }
+
+        UserServiceModel userServiceModel = this.userService.getUserByUsername(userLoginBindingModel.getUsername());
+
+        if (userServiceModel == null){
+            redirectAttributes.addFlashAttribute("userLoginBindingModel",userLoginBindingModel);
+            redirectAttributes.addFlashAttribute("notFound",true);
+
+            return "redirect:login";
+        }
+
+        httpSession.setAttribute("user",userServiceModel);
+
+
+        return "redirect:/";
     }
 
     @GetMapping("/register")
