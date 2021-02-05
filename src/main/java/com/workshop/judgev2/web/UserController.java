@@ -60,8 +60,9 @@ public class UserController {
             return "redirect:login";
         }
 
-        httpSession.setAttribute("user",userServiceModel);
+//        httpSession.setAttribute("user",userServiceModel);
 
+        this.userService.login(userServiceModel);
 
         return "redirect:/";
     }
