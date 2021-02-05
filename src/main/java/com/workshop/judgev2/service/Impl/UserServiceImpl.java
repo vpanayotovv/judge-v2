@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
     public void registerUser(UserServiceModel userServiceModel) {
         User user = this.modelMapper.map(userServiceModel,User.class);
         user.setRole(this.roleService.getRole(RoleName.USER));
-        this.userRepository.save(user);
+        this.userRepository.saveAndFlush(user);
     }
 
     @Override
