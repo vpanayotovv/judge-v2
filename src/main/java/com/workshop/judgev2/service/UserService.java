@@ -8,4 +8,6 @@ public interface UserService {
     UserServiceModel getUserByUsername(String username);
 
     void login(UserServiceModel userServiceModel);
+
+    void logout();
 }
