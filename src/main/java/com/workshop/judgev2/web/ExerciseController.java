@@ -30,8 +30,11 @@ public class ExerciseController  {
 
         if (bindingResult.hasErrors()){
             redirectAttributes.addFlashAttribute("exerciseAddBindingModel" ,exerciseAddBindingModel);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.exerciseAddBindingModel",bindingResult);
             return "redirect:add";
         }
+
+        //TODO:
 
         return "redirect:/";
     }

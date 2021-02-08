@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
@@ -22,6 +23,6 @@ public class ExerciseAddBindingModel {
     private LocalDateTime startedOn;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-    @PastOrPresent(message = "Date cannot be in the past")
+    @FutureOrPresent(message = "Date cannot be in the past")
     private LocalDateTime dueDate;
 }
