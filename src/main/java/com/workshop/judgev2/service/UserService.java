@@ -1,6 +1,7 @@
 package com.workshop.judgev2.service;
 
 import com.workshop.judgev2.model.entity.RoleName;
+import com.workshop.judgev2.model.entity.User;
 import com.workshop.judgev2.model.service.UserServiceModel;
 
 import java.util.List;
@@ -17,4 +18,6 @@ public interface UserService {
     List<String> getAllUsernames();
 
     void changeRole(String username, RoleName roleName);
+
+    User getById(long id);
 }

@@ -70,4 +70,10 @@ public class UserServiceImpl implements UserService {
             this.userRepository.save(user.get());
         }
     }
+
+    @Override
+    public User getById(long id) {
+
+        return this.userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("no such user"));
+    }
 }

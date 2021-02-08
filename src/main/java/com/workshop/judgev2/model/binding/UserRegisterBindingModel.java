@@ -7,6 +7,7 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 @Getter
 @Setter
@@ -30,5 +31,6 @@ public class UserRegisterBindingModel {
     private String email;
 
     @NotNull
+    @Pattern(regexp = "(?:git@|https://)github.com[:/](.*)" , message = "github is not valid")
     private String git;
 }

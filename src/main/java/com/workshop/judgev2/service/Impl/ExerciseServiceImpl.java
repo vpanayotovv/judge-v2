@@ -7,6 +7,9 @@ import com.workshop.judgev2.service.ExerciseService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Service
 public class ExerciseServiceImpl implements ExerciseService {
 
@@ -22,5 +25,24 @@ public class ExerciseServiceImpl implements ExerciseService {
     public void addEx(ExerciseServiceModel exerciseServiceModel) {
         Exercise exercise = this.modelMapper.map(exerciseServiceModel,Exercise.class);
         this.exerciseRepository.saveAndFlush(exercise);
+    }
+
+    @Override
+    public List<String> getAllExercise() {
+
+        return this.exerciseRepository.getAllExerices();
+    }
+
+    @Override
+    public boolean isLate(String exercise) {
+
+        Exercise exerciseEntity = this.exerciseRepository.findByName(exercise).orElseThrow(() -> new IllegalArgumentException("exercise do not exist"));
+
+        return exerciseEntity.getDueDate().isBefore(LocalDateTime.now());
+    }
+
+    @Override
+    public Exercise getByName(String name) {
+        return this.exerciseRepository.findByName(name).orElseThrow(() -> new IllegalArgumentException("exercise do not exist"));
     }
 }
