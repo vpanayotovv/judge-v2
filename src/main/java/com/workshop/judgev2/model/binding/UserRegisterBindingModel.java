@@ -23,7 +23,6 @@ public class UserRegisterBindingModel {
     private String password;
 
     @NotNull
-    @Length(min = 2,message = "Password must be minimum 2 characters")
     private String confirmPassword;
 
     @NotNull
@@ -31,6 +30,6 @@ public class UserRegisterBindingModel {
     private String email;
 
     @NotNull
-    @Pattern(regexp = "(?:git@|https://)github.com[:/](.*)" , message = "github is not valid")
+    @Pattern(regexp = "(?:git@|https://)github.com[:/](.*)" , message = "Github address is not valid")
     private String git;
 }

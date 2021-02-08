@@ -31,7 +31,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public void registerUser(UserServiceModel userServiceModel) {
         User user = this.modelMapper.map(userServiceModel,User.class);
-        user.setRole(this.roleService.getRole(RoleName.USER));
+        if (this.userRepository.count() == 0) {
+            user.setRole(this.roleService.getRole(RoleName.ADMIN));
+        }else {
+            user.setRole(this.roleService.getRole(RoleName.USER));
+        }
         this.userRepository.saveAndFlush(user);
     }
 
