@@ -1,6 +1,9 @@
 package com.workshop.judgev2.web;
 
 import com.workshop.judgev2.model.binding.ExerciseAddBindingModel;
+import com.workshop.judgev2.model.service.ExerciseServiceModel;
+import com.workshop.judgev2.service.ExerciseService;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,6 +17,14 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping("/exercises")
 public class ExerciseController  {
+
+    private final ExerciseService exerciseService;
+    private final ModelMapper modelMapper;
+
+    public ExerciseController(ExerciseService exerciseService, ModelMapper modelMapper) {
+        this.exerciseService = exerciseService;
+        this.modelMapper = modelMapper;
+    }
 
     @GetMapping("/add")
     public String addExercise(Model model){
@@ -34,7 +45,7 @@ public class ExerciseController  {
             return "redirect:add";
         }
 
-        //TODO:
+        this.exerciseService.addEx(this.modelMapper.map(exerciseAddBindingModel, ExerciseServiceModel.class));
 
         return "redirect:/";
     }
