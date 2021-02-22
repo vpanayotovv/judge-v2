@@ -34,4 +34,14 @@ public class HomeworkServiceImpl implements HomeworkService {
         homework.setAuthor(this.userService.getById(currentUser.getId()));
         this.homeworkRepository.saveAndFlush(homework);
     }
+
+    @Override
+    public Homework findHomework() {
+        return homeworkRepository.findTop1ByOrderByComments().orElse(null);
+    }
+
+    @Override
+    public Homework findById(Long homeworkId) {
+        return homeworkRepository.findById(homeworkId).orElse(null);
+    }
 }
