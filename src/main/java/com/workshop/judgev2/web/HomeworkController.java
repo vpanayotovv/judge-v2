@@ -1,6 +1,7 @@
 package com.workshop.judgev2.web;
 
 import com.workshop.judgev2.model.binding.HomeworkAddBindingModel;
+import com.workshop.judgev2.security.CurrentUser;
 import com.workshop.judgev2.service.ExerciseService;
 import com.workshop.judgev2.service.HomeworkService;
 import org.springframework.stereotype.Controller;
@@ -19,14 +20,21 @@ public class HomeworkController {
 
     private final ExerciseService exerciseService;
     private final HomeworkService homeworkService;
+    private final CurrentUser currentUser;
 
-    public HomeworkController(ExerciseService exerciseService, HomeworkService homeworkService) {
+    public HomeworkController(ExerciseService exerciseService, HomeworkService homeworkService, CurrentUser currentUser) {
         this.exerciseService = exerciseService;
         this.homeworkService = homeworkService;
+        this.currentUser = currentUser;
     }
 
     @GetMapping("/add")
     public String add(Model model){
+
+        if (currentUser.isAnonymous()){
+            return "redirect:/users/login";
+        }
+
         if (!model.containsAttribute("homeworkAddBindingModel")){
             model.addAttribute("homeworkAddBindingModel", new HomeworkAddBindingModel());
             model.addAttribute("isLate",false);

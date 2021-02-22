@@ -3,6 +3,7 @@ package com.workshop.judgev2.web;
 import com.workshop.judgev2.model.binding.UserLoginBindingModel;
 import com.workshop.judgev2.model.binding.UserRegisterBindingModel;
 import com.workshop.judgev2.model.service.UserServiceModel;
+import com.workshop.judgev2.security.CurrentUser;
 import com.workshop.judgev2.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
@@ -20,10 +21,12 @@ public class UserController {
 
     private final UserService userService;
     private final ModelMapper modelMapper;
+    private final CurrentUser currentUser;
 
-    public UserController(UserService userService, ModelMapper modelMapper) {
+    public UserController(UserService userService, ModelMapper modelMapper, CurrentUser currentUser) {
         this.userService = userService;
         this.modelMapper = modelMapper;
+        this.currentUser = currentUser;
     }
 
     @GetMapping("/login")
@@ -102,6 +105,10 @@ public class UserController {
 
     @GetMapping("profile/{id}")
     public String profile(@PathVariable Long id, Model model){
+
+        if (currentUser.isAnonymous()){
+            return "redirect:/users/login";
+        }
 
         model.addAttribute("user", userService.findProfileById(id));
         return "profile";

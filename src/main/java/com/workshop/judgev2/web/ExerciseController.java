@@ -2,6 +2,7 @@ package com.workshop.judgev2.web;
 
 import com.workshop.judgev2.model.binding.ExerciseAddBindingModel;
 import com.workshop.judgev2.model.service.ExerciseServiceModel;
+import com.workshop.judgev2.security.CurrentUser;
 import com.workshop.judgev2.service.ExerciseService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
@@ -20,14 +21,21 @@ public class ExerciseController  {
 
     private final ExerciseService exerciseService;
     private final ModelMapper modelMapper;
+    private final CurrentUser currentUser;
 
-    public ExerciseController(ExerciseService exerciseService, ModelMapper modelMapper) {
+    public ExerciseController(ExerciseService exerciseService, ModelMapper modelMapper, CurrentUser currentUser) {
         this.exerciseService = exerciseService;
         this.modelMapper = modelMapper;
+        this.currentUser = currentUser;
     }
 
     @GetMapping("/add")
     public String addExercise(Model model){
+
+        if (currentUser.isAnonymous()){
+            return "redirect:/users/login";
+        }
+
         if (!model.containsAttribute("exerciseAddBindingModel")){
             model.addAttribute("exerciseAddBindingModel" , new ExerciseAddBindingModel());
         }

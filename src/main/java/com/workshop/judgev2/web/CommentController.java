@@ -1,6 +1,7 @@
 package com.workshop.judgev2.web;
 
 import com.workshop.judgev2.model.binding.CommentBindingModel;
+import com.workshop.judgev2.security.CurrentUser;
 import com.workshop.judgev2.service.CommentService;
 import com.workshop.judgev2.service.HomeworkService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,15 +21,21 @@ public class CommentController {
 
     private final HomeworkService homeworkService;
     private final CommentService commentService;
+    private final CurrentUser currentUser;
 
     @Autowired
-    public CommentController(HomeworkService homeworkService, CommentService commentService) {
+    public CommentController(HomeworkService homeworkService, CommentService commentService, CurrentUser currentUser) {
         this.homeworkService = homeworkService;
         this.commentService = commentService;
+        this.currentUser = currentUser;
     }
 
     @GetMapping("/add")
     public String add(Model model){
+
+        if (currentUser.isAnonymous()){
+            return "redirect:/users/login";
+        }
 
         if(!model.containsAttribute("commentBindingModel")){
             model.addAttribute("commentBindingModel",new CommentBindingModel());
