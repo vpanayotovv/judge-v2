@@ -10,6 +10,9 @@ import com.workshop.judgev2.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Service
 public class CommentServiceImpl implements CommentService {
 
@@ -32,6 +35,31 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = modelMapper.map(commentBindingModel,Comment.class);
         comment.setAuthor(userService.getById(currentUser.getId()));
         comment.setHomework(homeworkService.findById(commentBindingModel.getHomeworkId()));
-        commentRepository.saveAndFlush(comment);
+        commentRepository.save(comment);
+    }
+
+    @Override
+    public Double findAvgScore() {
+        return commentRepository.findAveragedScore();
+    }
+
+    @Override
+    public Map<Integer, Integer> findScore() {
+        Map<Integer,Integer> result = initScore();
+        commentRepository
+                .findAll()
+                .forEach(comment -> {
+                    Integer score = comment.getScore();
+                    result.put(score,result.get(score) + 1);
+                });
+        return result;
+    }
+
+    private Map<Integer, Integer> initScore() {
+        Map<Integer,Integer> result = new HashMap<>();
+        for (int i = 2; i <= 6; i++) {
+            result.put(i,0);
+        }
+        return result;
     }
 }

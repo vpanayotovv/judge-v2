@@ -92,4 +92,9 @@ public class UserServiceImpl implements UserService {
             return userProfileViewModel;
         }).orElse(null);
     }
+
+    @Override
+    public Long getUsersCount() {
+        return userRepository.count();
+    }
 }
