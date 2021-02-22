@@ -3,6 +3,7 @@ package com.workshop.judgev2.service.Impl;
 import com.workshop.judgev2.model.entity.RoleName;
 import com.workshop.judgev2.model.entity.User;
 import com.workshop.judgev2.model.service.UserServiceModel;
+import com.workshop.judgev2.model.view.UserProfileViewModel;
 import com.workshop.judgev2.repository.UserRepository;
 import com.workshop.judgev2.security.CurrentUser;
 import com.workshop.judgev2.service.RoleService;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -30,10 +32,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void registerUser(UserServiceModel userServiceModel) {
-        User user = this.modelMapper.map(userServiceModel,User.class);
+        User user = this.modelMapper.map(userServiceModel, User.class);
         if (this.userRepository.count() == 0) {
             user.setRole(this.roleService.getRole(RoleName.ADMIN));
-        }else {
+        } else {
             user.setRole(this.roleService.getRole(RoleName.USER));
         }
         this.userRepository.saveAndFlush(user);
@@ -41,9 +43,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserServiceModel getUserByUsername(String username) {
-       return this.userRepository.findByUsername(username)
-               .map(user -> this.modelMapper.map(user,UserServiceModel.class))
-               .orElse(null);
+        return this.userRepository.findByUsername(username)
+                .map(user -> this.modelMapper.map(user, UserServiceModel.class))
+                .orElse(null);
     }
 
     @Override
@@ -62,7 +64,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<String> getAllUsernames() {
-       return this.userRepository.findAllByUsername();
+        return this.userRepository.findAllByUsername();
     }
 
     @Override
@@ -79,5 +81,15 @@ public class UserServiceImpl implements UserService {
     public User getById(long id) {
 
         return this.userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("no such user"));
+    }
+
+    @Override
+    public UserProfileViewModel findProfileById(Long id) {
+        return userRepository.findById(id)
+                .map(user -> {
+            UserProfileViewModel userProfileViewModel = modelMapper.map(user, UserProfileViewModel.class);
+            userProfileViewModel.setHomeworks(user.getHomeworks().stream().map(homework -> homework.getExercise().getName()).collect(Collectors.toList()));
+            return userProfileViewModel;
+        }).orElse(null);
     }
 }
